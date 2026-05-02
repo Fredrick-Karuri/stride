@@ -1,0 +1,22 @@
+groups:
+  dev:
+    description: Development commands
+    commands:
+      install:
+        description: Install project in editable mode
+        run: "pip install -e '.[dev]'"
+  test:
+    description: Test suite
+    commands:
+      run:
+        description: Run all tests
+        run: "pytest"
+      cov:
+        description: Run tests with coverage
+        run: "pytest --cov=stride --cov-report=term-missing"
+  lint:
+    description: Code quality
+    commands:
+      check:
+        description: Check for lint errors
+        run: "ruff check ."
