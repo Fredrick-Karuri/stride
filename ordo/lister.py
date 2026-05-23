@@ -1,5 +1,5 @@
 import sys
-from stride.config import Config
+from ordo.config import Config
 
 
 class Lister:

@@ -1,14 +1,14 @@
-# Stride
+# Ordo
 
 A structured command runner — a clean alternative to `make`.
 
-Stride reads a `stride.yaml` config, groups your commands logically, and runs them with a simple `group:command` syntax. No more flat Makefiles. No more guessing what commands exist.
+Ordo reads an `ordo.yaml` config, groups your commands logically, and runs them with a simple `group:command` syntax. No more flat Makefiles. No more guessing what commands exist.
 
 ---
 
 ## Why not make?
 
-| | `make` | Stride |
+| | `make` | Ordo |
 |---|---|---|
 | Grouped commands | ✗ | ✓ |
 | Built-in discovery | ✗ | ✓ |
@@ -21,16 +21,16 @@ Stride reads a `stride.yaml` config, groups your commands logically, and runs th
 ## Installation
 
 ```bash
-pip install stride
+pip install ordo
 # or
-pipx install stride
+pipx install ordo
 ```
 
 ---
 
 ## Quick start
 
-Create a `stride.yaml` at your project root:
+Create an `ordo.yaml` at your project root:
 
 ```yaml
 groups:
@@ -58,9 +58,9 @@ groups:
 Then:
 
 ```bash
-stride list          # see all commands
-stride run dev:start # run one
-stride validate      # check your config
+ordo list          # see all commands
+ordo run dev:start # run one
+ordo validate      # check your config
 ```
 
 ---
@@ -68,25 +68,25 @@ stride validate      # check your config
 ## CLI reference
 
 ```
-stride list                     List all commands
-stride list --verbose           Also show raw run strings
-stride run <group:command>      Execute a command
-stride validate                 Validate stride.yaml
-stride --version                Print version
-stride --help                   Print help
+ordo list                     List all commands
+ordo list --verbose           Also show raw run strings
+ordo run <group:command>      Execute a command
+ordo validate                 Validate ordo.yaml
+ordo --version                Print version
+ordo --help                   Print help
 ```
 
 ---
 
-## stride.yaml reference
+## ordo.yaml reference
 
 ```yaml
 groups:
   <group-name>:
-    description: string        # optional — shown in stride list
+    description: string        # optional — shown in ordo list
     commands:
       <command-name>:
-        description: string    # optional — shown in stride list
+        description: string    # optional — shown in ordo list
         run: string            # required — shell command to execute
 ```
 
@@ -101,14 +101,14 @@ groups:
 
 ## Config discovery
 
-Stride finds `stride.yaml` in this order:
+Ordo finds `ordo.yaml` in this order:
 
-1. `STRIDE_CONFIG` environment variable
+1. `ORDO_CONFIG` environment variable
 2. `--config` CLI flag
-3. `stride.yaml` in current directory
+3. `ordo.yaml` in current directory
 4. Walk up the directory tree until `.git` is found
 
-You can run `stride` from any subdirectory in your repo — it will find the config.
+You can run `ordo` from any subdirectory in your repo — it will find the config.
 
 ---
 

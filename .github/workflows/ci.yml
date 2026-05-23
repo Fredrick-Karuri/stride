@@ -24,7 +24,7 @@ jobs:
         run: pip install -e ".[dev]"
 
       - name: Run tests
-        run: pytest --cov=stride --cov-report=term-missing
+        run: pytest --cov=ordo --cov-report=term-missing
 
-      - name: Validate stride.yaml
-        run: stride validate
+      - name: Validate ordo.yaml
+        run: ordo validate

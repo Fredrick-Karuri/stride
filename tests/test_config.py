@@ -1,11 +1,11 @@
 import os
 import pytest
 from pathlib import Path
-from stride.config import parse, discover, Command, Group, Config
-from stride.errors import ConfigNotFoundError, ConfigParseError
+from ordo.config import parse, discover, Command, Group, Config
+from ordo.errors import ConfigNotFoundError, ConfigParseError
 
 
-# --- STRIDE-003: dataclasses ---
+# dataclasses ---
 
 def test_command_dataclass():
     cmd = Command(name="start", run="uvicorn app:app")
@@ -28,7 +28,7 @@ def test_config_dataclass(tmp_path):
     assert config.config_dir == tmp_path
 
 
-# --- STRIDE-004: config parser ---
+# config parser ---
 
 def test_parse_valid_config(tmp_config):
     path = tmp_config()
@@ -77,7 +77,7 @@ def test_parse_missing_groups_key_raises(tmp_config):
         parse(path)
 
 
-# --- STRIDE-005: config discovery ---
+# config discovery ---
 
 def test_discover_in_cwd(tmp_config, tmp_path):
     path = tmp_config()
@@ -95,14 +95,14 @@ def test_discover_stops_at_git_boundary(tmp_path):
     (tmp_path / ".git").mkdir()
     subdir = tmp_path / "src"
     subdir.mkdir()
-    # No stride.yaml anywhere, .git is at tmp_path
+    # No ordo.yaml anywhere, .git is at tmp_path
     with pytest.raises(ConfigNotFoundError) as exc:
         discover(start=subdir)
-    assert str(tmp_path / "stride.yaml") in exc.value.checked
+    assert str(tmp_path / "ordo.yaml") in exc.value.checked
 
 def test_discover_respects_env_var(tmp_config, monkeypatch):
     path = tmp_config()
-    monkeypatch.setenv("STRIDE_CONFIG", str(path))
+    monkeypatch.setenv("ORDO_CONFIG", str(path))
     found = discover()
     assert found == path
 
@@ -111,4 +111,4 @@ def test_discover_not_found_lists_checked_paths(tmp_path):
     with pytest.raises(ConfigNotFoundError) as exc:
         discover(start=tmp_path)
     assert len(exc.value.checked) >= 1
-    assert "stride.yaml" in exc.value.checked[0]
+    assert "ordo.yaml" in exc.value.checked[0]

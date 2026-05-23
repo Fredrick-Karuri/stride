@@ -22,9 +22,9 @@ groups:
 
 @pytest.fixture
 def tmp_config(tmp_path):
-    """Write stride.yaml to a temp dir and return a factory."""
+    """Write ordo.yaml to a temp dir and return a factory."""
     def _make(content: str = VALID_YAML) -> Path:
-        config_file = tmp_path / "stride.yaml"
+        config_file = tmp_path / "ordo.yaml"
         config_file.write_text(content)
         return config_file
     return _make

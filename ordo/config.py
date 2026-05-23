@@ -3,7 +3,7 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 import yaml
-from stride.errors import ConfigNotFoundError, ConfigParseError
+from ordo.errors import ConfigNotFoundError, ConfigParseError
 
 
 @dataclass
@@ -27,8 +27,8 @@ class Config:
 
 
 def discover(start: Path | None = None) -> Path:
-    """Find stride.yaml by env var or walking up from start dir."""
-    env = os.environ.get("STRIDE_CONFIG")
+    """Find ordo.yaml by env var or walking up from start dir."""
+    env = os.environ.get("ORDO_CONFIG")
     if env:
         p = Path(env)
         if p.exists():
@@ -39,7 +39,7 @@ def discover(start: Path | None = None) -> Path:
     checked = []
 
     while True:
-        candidate = current / "stride.yaml"
+        candidate = current / "ordo.yaml"
         checked.append(str(candidate))
         if candidate.exists():
             return candidate
@@ -49,7 +49,7 @@ def discover(start: Path | None = None) -> Path:
 
 
 def parse(path: Path) -> Config:
-    """Parse stride.yaml into a Config dataclass."""
+    """Parse ordo.yaml into a Config dataclass."""
     try:
         raw = yaml.safe_load(path.read_text())
     except yaml.YAMLError as e:

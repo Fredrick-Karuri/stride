@@ -1,5 +1,5 @@
-from stride.config import parse
-from stride.lister import Lister
+from ordo.config import parse
+from ordo.lister import Lister
 import io, sys
 
 def test_list_basic(tmp_config, capsys):

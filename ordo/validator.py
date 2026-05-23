@@ -1,5 +1,5 @@
-from stride.config import Config
-from stride.errors import ValidationError
+from ordo.config import Config
+from ordo.errors import ValidationError
 
 
 class Validator:

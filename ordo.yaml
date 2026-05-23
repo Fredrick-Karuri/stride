@@ -14,7 +14,7 @@ groups:
         run: "pytest"
       cov:
         description: Run tests with coverage report
-        run: "pytest --cov=stride --cov-report=term-missing"
+        run: "pytest --cov=ordo --cov-report=term-missing"
 
   lint:
     description: Code quality
@@ -37,4 +37,4 @@ groups:
         run: "twine upload dist/*"
       validate:
         description: Validate config before release
-        run: "stride validate"
+        run: "ordo validate"

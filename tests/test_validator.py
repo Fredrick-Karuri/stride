@@ -1,6 +1,6 @@
 import pytest
-from stride.config import parse
-from stride.validator import Validator
+from ordo.config import parse
+from ordo.validator import Validator
 
 
 def test_valid_config_returns_no_errors(tmp_config):

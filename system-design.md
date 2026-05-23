@@ -1,7 +1,7 @@
-# Stride — System Design
+# Ordo — System Design
 
 **Version:** 1.0  
-**Project:** Stride (v1 Python, v2 Go)  
+**Project:** Ordo (v1 Python, v2 Go)  
 **Last updated:** May 2026
 
 ---
@@ -23,10 +23,10 @@
 
 ## 1. Overview
 
-Stride is a CLI tool that reads a `stride.yaml` config, groups shell commands, and runs them via `stride run group:command`. It has no daemon, no network, no state. Every invocation is stateless and self-contained.
+Ordo is a CLI tool that reads an `ordo.yaml` config, groups shell commands, and runs them via `ordo run group:command`. It has no daemon, no network, no state. Every invocation is stateless and self-contained.
 
 ```
-stride.yaml  →  Stride CLI  →  sh -c "<run string>"
+ordo.yaml  →  Ordo CLI  →  sh -c "<run string>"
 ```
 
 ---
@@ -65,8 +65,8 @@ All components are thin. Business logic lives in the config loader and runner. T
 ## 3. Folder Structure
 
 ```
-stride/
-├── stride/                  # main package
+ordo/
+├── ordo/                    # main package
 │   ├── __init__.py
 │   ├── cli.py               # entry point, argument parsing (Click)
 │   ├── config.py            # discovery, parsing, validation
@@ -81,7 +81,7 @@ stride/
 │   ├── test_lister.py
 │   └── test_validator.py
 │
-├── stride.yaml              # dogfood: stride's own dev commands
+├── ordo.yaml                # dogfood: ordo's own dev commands
 ├── pyproject.toml           # packaging, deps, entry point
 ├── README.md
 └── .github/
@@ -102,7 +102,7 @@ stride/
 ### 4.2 `config.py`
 
 **`ConfigLoader`**
-- `discover(start_dir) -> Path` — finds `stride.yaml`
+- `discover(start_dir) -> Path` — finds `ordo.yaml`
 - `load(path) -> Config` — reads and parses YAML into a typed dataclass
 - `Config` dataclass holds groups → commands → run strings
 
@@ -152,11 +152,11 @@ class Config:
 ### 4.6 `errors.py`
 
 ```python
-class StrideError(Exception): ...
-class ConfigNotFoundError(StrideError): ...
-class ConfigParseError(StrideError): ...
-class UnknownCommandError(StrideError): ...
-class ValidationError(StrideError): ...
+class OrdoError(Exception): ...
+class ConfigNotFoundError(OrdoError): ...
+class ConfigParseError(OrdoError): ...
+class UnknownCommandError(OrdoError): ...
+class ValidationError(OrdoError): ...
 ```
 
 ---
@@ -166,21 +166,21 @@ class ValidationError(StrideError): ...
 Discovery order (first match wins):
 
 ```
-1. STRIDE_CONFIG env var
+1. ORDO_CONFIG env var
 2. --config CLI flag
-3. stride.yaml in CWD
+3. ordo.yaml in CWD
 4. Walk up directories until .git is found
 5. → ConfigNotFoundError with all checked paths listed
 ```
 
 ```python
 def discover(start: Path) -> Path:
-    for env_var in [os.environ.get("STRIDE_CONFIG")]:
+    for env_var in [os.environ.get("ORDO_CONFIG")]:
         if env_var:
             return Path(env_var)
     current = start
     while True:
-        candidate = current / "stride.yaml"
+        candidate = current / "ordo.yaml"
         if candidate.exists():
             return candidate
         if (current / ".git").exists() or current == current.parent:
@@ -193,16 +193,16 @@ def discover(start: Path) -> Path:
 ## 6. Command Execution
 
 ```
-stride run dev:start
-       │
-       ├── parse "dev:start" → group="dev", command="start"
-       ├── load config
-       ├── look up config.groups["dev"].commands["start"]
-       ├── set CWD = config.config_dir
-       ├── register SIGINT handler
-       ├── Popen(["sh", "-c", cmd.run], cwd=config_dir)
-       ├── stream stdout/stderr
-       └── sys.exit(process.returncode)
+ordo run dev:start
+     │
+     ├── parse "dev:start" → group="dev", command="start"
+     ├── load config
+     ├── look up config.groups["dev"].commands["start"]
+     ├── set CWD = config.config_dir
+     ├── register SIGINT handler
+     ├── Popen(["sh", "-c", cmd.run], cwd=config_dir)
+     ├── stream stdout/stderr
+     └── sys.exit(process.returncode)
 ```
 
 ### Signal handling
@@ -250,13 +250,13 @@ When `group:command` is not found:
 ## 8. CLI Design
 
 ```
-stride                        # shows help
-stride list                   # list all commands
-stride list --verbose         # list with raw run strings
-stride run <group:command>    # execute a command
-stride validate               # validate stride.yaml
-stride --version              # print version
-stride --help                 # print help
+ordo                        # shows help
+ordo list                   # list all commands
+ordo list --verbose         # list with raw run strings
+ordo run <group:command>    # execute a command
+ordo validate               # validate ordo.yaml
+ordo --version              # print version
+ordo --help                 # print help
 ```
 
 Output conventions:
@@ -284,8 +284,8 @@ Hooks (pre/post command) add complexity around error handling and exit codes tha
 ### Why dataclasses over dicts for config?
 Type safety, IDE autocompletion, and cleaner access patterns. Makes the Go rewrite easier to reason about since the schema is explicit.
 
-### Why `stride.yaml` not `tool.yaml`?
-The tool has a name now. `stride.yaml` is self-documenting when you see it in a repo.
+### Why `ordo.yaml` not `tool.yaml`?
+The tool has a name now. `ordo.yaml` is self-documenting when you see it in a repo.
 
 ---
 
@@ -306,15 +306,15 @@ When you're ready to rewrite in Go, the Python version will have proven the desi
 The folder structure maps cleanly:
 
 ```
-stride/
-├── cmd/stride/main.go       # entry point
+ordo/
+├── cmd/ordo/main.go         # entry point
 ├── internal/
 │   ├── config/              # config.py → config/
 │   ├── runner/              # runner.py → runner/
 │   ├── lister/              # lister.py → lister/
 │   └── validator/           # validator.py → validator/
 ├── go.mod
-└── stride.yaml
+└── ordo.yaml
 ```
 
 The Go version will produce a single static binary with no runtime, distributable via `brew`, `curl | sh`, or GitHub releases. That's the payoff for doing v1 in Python first.

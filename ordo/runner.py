@@ -2,8 +2,8 @@ import difflib
 import signal
 import subprocess
 import sys
-from stride.config import Config
-from stride.errors import UnknownCommandError
+from ordo.config import Config
+from ordo.errors import UnknownCommandError
 
 
 class Runner:
