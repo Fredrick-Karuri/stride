@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ordo-cli"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Structured command runner — a clean alternative to make"
 readme = "README.md"
 license = { text = "MIT" }
@@ -21,11 +21,15 @@ ordo = "ordo.cli:main"
 dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
+    "pyinstaller>=6.0",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["ordo*"]
+
+[tool.setuptools.dynamic]
+version = { file = "VERSION" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

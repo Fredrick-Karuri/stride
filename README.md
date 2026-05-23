@@ -20,6 +20,18 @@ Ordo reads an `ordo.yaml` config, groups your commands logically, and runs them 
 
 ## Installation
 
+**Standalone binary — no Python required:**
+
+Download the binary for your platform from the [latest release](https://github.com/fredrick-karuri/ordo/releases/latest) and put it on your PATH.
+
+| Platform | File |
+|---|---|
+| macOS | `ordo-macos` |
+| Linux | `ordo-linux` |
+| Windows | `ordo-windows.exe` |
+
+**Via PyPI:**
+
 ```bash
 pip install ordo-cli
 # or
